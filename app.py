@@ -1,9 +1,9 @@
-
 import streamlit as st
 from google import genai
-# Get Gemini API key from Streamlit Cloud Secrets
-key = st.secrets["GEMINI_API_KEY"]
+from google.genai import types
 
+# Get Gemini API key from Streamlit Secrets
+key = st.secrets["GEMINI_API_KEY"]
 
 # Connect to Gemini
 client = genai.Client(api_key=key)
@@ -11,20 +11,20 @@ client = genai.Client(api_key=key)
 # Page settings
 st.set_page_config(
     page_title="Electro-Doc AI",
-    page_icon="⚡"
+    page_icon="⚡",
+    layout="centered"
 )
 
-# Title
 st.title("⚡ Electro-Doc AI")
 st.subheader("Intelligent Electrical Datasheet Assistant")
 
 st.write(
-    "Enter an electrical equipment model and let AI identify it."
+    "Enter an electrical equipment model and find "
+    "its official manufacturer datasheet."
 )
 
 st.divider()
 
-# User inputs
 manufacturer = st.text_input(
     "🏭 Manufacturer",
     placeholder="Example: Siemens"
@@ -40,42 +40,59 @@ model = st.text_input(
     placeholder="Example: 3RT2015-1BB41"
 )
 
-# AI button
-if st.button("🤖 Identify Equipment", use_container_width=True):
+if st.button("🔍 Find Official Datasheet", use_container_width=True):
 
     if manufacturer and equipment and model:
 
-        with st.spinner("AI is analyzing..."):
+        with st.spinner("Searching for the official datasheet..."):
 
             prompt = f"""
-You are an electrical engineering assistant.
+Find the official manufacturer datasheet for this electrical equipment:
 
 Manufacturer: {manufacturer}
 Equipment Type: {equipment}
 Model Number: {model}
 
-Give the following:
+IMPORTANT:
+- Search the web.
+- Prefer the official manufacturer's website.
+- Verify that the model number exactly matches.
+- Do not guess or invent a datasheet.
+- If an official datasheet cannot be verified, clearly say so.
 
-1. Equipment identification
-2. What it is used for
-3. Important datasheet parameters to check
-4. How a user can find the official manufacturer's datasheet
+Give the result in this format:
 
-Do not invent exact specifications.
-If you are uncertain, clearly say so.
+Equipment:
+Manufacturer:
+Model:
+Description:
+
+Official Datasheet:
+[provide the official datasheet URL if found]
+
+Important Specifications:
+- List the most important specifications found.
+
+Source:
+[official manufacturer website URL]
 """
 
             response = client.interactions.create(
                 model="gemini-3.7-flash",
                 input=prompt,
+                tools=[
+                    types.Tool(
+                        google_search=types.GoogleSearch()
+                    )
+                ],
                 generation_config={
                     "thinking_level": "low"
                 }
             )
 
-            st.success("Analysis completed!")
+            st.success("Search completed!")
 
-            st.markdown("### 🤖 AI Result")
+            st.markdown("### 📄 Datasheet Result")
             st.write(response.output_text)
 
     else:
@@ -83,4 +100,5 @@ If you are uncertain, clearly say so.
             "Please enter Manufacturer, Equipment Type "
             "and Model Number."
         )
-        
+
+
