@@ -81,10 +81,11 @@ Source:
                 model="gemini-3.7-flash",
                 input=prompt,
                 tools=[
-                    types.Tool(
-                        google_search=types.GoogleSearch()
-                    )
-                ],
+    {"type": "google_search"}
+],
+                    
+                    
+                
                 generation_config={
                     "thinking_level": "low"
                 }
