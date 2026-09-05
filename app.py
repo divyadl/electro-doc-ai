@@ -1,10 +1,9 @@
 
 import streamlit as st
 from google import genai
-from google.colab import userdata
+# Get Gemini API key from Streamlit Cloud Secrets
+key = st.secrets["GEMINI_API_KEY"]
 
-# Get Gemini API key
-key = userdata.get("divya@1011")
 
 # Connect to Gemini
 client = genai.Client(api_key=key)
