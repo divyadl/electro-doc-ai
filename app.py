@@ -4,6 +4,7 @@ from tavily import TavilyClient
 
 # Get Gemini API key from Streamlit Secrets
 key = st.secrets["GEMINI_API_KEY"]
+tavily = TavilyClient(api_key=st.secrets["TAVILY_API_KEY"])
 
 # Connect to Gemini
 client = genai.Client(api_key=key)
