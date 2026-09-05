@@ -1,6 +1,6 @@
 import streamlit as st
 from google import genai
-from google.genai import types
+from tavily import TavilyClient
 
 # Get Gemini API key from Streamlit Secrets
 key = st.secrets["GEMINI_API_KEY"]
