@@ -80,9 +80,7 @@ Source:
             response = client.interactions.create(
                 model="gemini-3.7-flash",
                 input=prompt,
-                tools=[
-    {"type": "google_search"}
-],
+        
                     
                     
                 
