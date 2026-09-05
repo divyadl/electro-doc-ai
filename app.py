@@ -42,7 +42,6 @@ model = st.text_input(
 )
 
 if st.button("🔍 Find Official Datasheet", use_container_width=True):
-if st.button("🔍 Find Official Datasheet", use_container_width=True):
 
     if manufacturer and equipment and model:
 
